@@ -172,11 +172,11 @@ const FinancialAssessment: React.FC<FinancialAssessmentProps> = ({ user, onGoBac
             </div>
             
             <h2 className="text-4xl font-bold text-gray-900 dark:text-white font-display">
-                Diagnóstico de Cidadania & Saúde Financeira
+                Diagnóstico de Bem-Estar Financeiro
             </h2>
             
-            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed font-sans">
-                Descubra o seu **Índice de Saúde Financeira (I-SFB)** oficial, referenciado pelo Banco Central do Brasil. Por meio desta jornada empírica, mapearemos seus níveis de **Autocontrole de Consumo** e **Contabilidade Mental** para recomendar diretrizes de investimento, poupança e reestruturação de forma acolhedora.
+            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed font-sans font-medium">
+                Descubra o seu <strong className="font-bold text-gray-800 dark:text-white">Índice de Saúde Financeira (I-SFB)</strong> oficial, referenciado pelo Banco Central do Brasil. Por meio desta jornada empírica, mapearemos seus níveis de <strong className="font-bold text-gray-800 dark:text-white">Autocontrole de Consumo</strong> e <strong className="font-bold text-gray-800 dark:text-white">Contabilidade Mental</strong> para recomendar diretrizes de investimento, poupança e reestruturação de forma acolhedora.
             </p>
 
             {assessmentResult && (
