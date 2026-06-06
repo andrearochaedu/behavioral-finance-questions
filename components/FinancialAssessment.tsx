@@ -3,8 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { FINANCIAL_QUESTIONS } from '../services/questionnaireData';
 import { storageService } from '../services/storageService';
 import { User, Assessment, AssessmentAnswer } from '../types';
-import { Radar } from 'react-chartjs-2';
-import 'chart.js/auto';
 import { 
     ArrowRightIcon, 
     ArrowLeftIcon, 
@@ -45,21 +43,12 @@ const FinancialAssessment: React.FC<FinancialAssessmentProps> = ({ user, onGoBac
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [answers, setAnswers] = useState<Record<string, number>>({}); 
     const [assessmentResult, setAssessmentResult] = useState<Assessment | null>(null);
-    const [chartData, setChartData] = useState<any>(null);
-    const [themeKey, setThemeKey] = useState(0);
-
-    useEffect(() => {
-        const observer = new MutationObserver(() => setThemeKey(prev => prev + 1));
-        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-        return () => observer.disconnect();
-    }, []);
 
     useEffect(() => {
         const loadPrevious = async () => {
             const prev = await storageService.getLatestAssessment(user.id);
             if (prev) {
                 setAssessmentResult(prev);
-                prepareChartData(prev);
                 setStep('intro');
             }
         };
@@ -151,7 +140,7 @@ const FinancialAssessment: React.FC<FinancialAssessmentProps> = ({ user, onGoBac
             };
         });
 
-        const { chartDataPoints, finalScore } = calculateScore(finalAnswersScores);
+        const { finalScore } = calculateScore(finalAnswersScores);
 
         const newAssessment: Assessment = {
             id: Date.now().toString(),
@@ -165,86 +154,11 @@ const FinancialAssessment: React.FC<FinancialAssessmentProps> = ({ user, onGoBac
         try {
             await storageService.saveAssessment(user.id, newAssessment);
             setAssessmentResult(newAssessment);
-            formatChartDataForLibrary(chartDataPoints);
             setStep('result');
         } catch (error) {
             console.error(error);
             alert("Erro ao salvar resultado.");
             setStep('intro');
-        }
-    };
-
-    const prepareChartData = (assessment: Assessment) => {
-        const simpleAnswersScores: Record<string, number> = {};
-        
-        assessment.answers.forEach(a => {
-            const q = FINANCIAL_QUESTIONS.find(quest => quest.id === a.questionId);
-            if (q && q.options) {
-                const opt = q.options.find(o => o.text === a.value);
-                if (opt) {
-                    simpleAnswersScores[a.questionId] = opt.score;
-                }
-            }
-        });
-        
-        const { chartDataPoints } = calculateScore(simpleAnswersScores);
-        formatChartDataForLibrary(chartDataPoints);
-    };
-
-    const formatChartDataForLibrary = (dataPoints: any[]) => {
-        setChartData({
-            labels: dataPoints.map(d => d.subject),
-            datasets: [{
-                label: 'Seu Perfil',
-                data: dataPoints.map(d => d.A),
-                fill: true,
-                backgroundColor: 'rgba(99, 102, 241, 0.2)',
-                borderColor: 'rgba(99, 102, 241, 1)',
-                pointBackgroundColor: 'rgba(99, 102, 241, 1)',
-                pointBorderColor: '#fff',
-                pointHoverBackgroundColor: '#fff',
-                pointHoverBorderColor: 'rgba(99, 102, 241, 1)'
-            }]
-        });
-    };
-
-    const radarOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
-        layout: {
-            padding: {
-                top: 10,
-                bottom: 10,
-                left: 35,
-                right: 35
-            }
-        },
-        scales: {
-            r: {
-                angleLines: {
-                    color: isDarkMode() ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
-                },
-                grid: {
-                    color: isDarkMode() ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
-                },
-                pointLabels: {
-                    color: isDarkMode() ? '#e5e7eb' : '#374151',
-                    font: { 
-                      size: window.innerWidth < 640 ? 10 : 13,
-                      weight: 'bold' as const
-                    },
-                    padding: 10
-                },
-                ticks: {
-                    display: false,
-                    backdropColor: 'transparent'
-                },
-                suggestedMin: 0,
-                suggestedMax: 100
-            }
-        },
-        plugins: {
-            legend: { display: false }
         }
     };
 
@@ -283,7 +197,7 @@ const FinancialAssessment: React.FC<FinancialAssessmentProps> = ({ user, onGoBac
                 
                 {assessmentResult && (
                     <button 
-                        onClick={() => { prepareChartData(assessmentResult); setStep('result'); }}
+                        onClick={() => setStep('result')}
                         className="px-8 py-4 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 rounded-xl font-bold text-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-all"
                     >
                         Ver Último Resultado
@@ -387,15 +301,15 @@ const FinancialAssessment: React.FC<FinancialAssessmentProps> = ({ user, onGoBac
         }
 
         return (
-            <div className="max-w-6xl mx-auto py-6 animate-fade-in">
+            <div className="max-w-4xl mx-auto py-6 animate-fade-in">
                 <div className="text-center mb-10 px-4">
                     <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white font-display mb-2">Seu Relatório de Comportamento</h2>
                     <p className="text-gray-500 text-sm md:text-base">Análise realizada em {new Date().toLocaleDateString()}</p>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch px-4">
+                <div className="max-w-md mx-auto px-4">
                     {/* Gauge Card */}
-                    <div className="lg:col-span-4 bg-[#111827] dark:bg-gray-800 p-8 md:p-10 rounded-[2.5rem] shadow-2xl flex flex-col items-center justify-center text-center border border-white/5 h-full">
+                    <div className="bg-[#111827] dark:bg-gray-800 p-8 md:p-10 rounded-[2.5rem] shadow-2xl flex flex-col items-center justify-center text-center border border-white/5 h-full">
                         <h3 className="text-gray-400 font-bold uppercase tracking-widest text-[10px] md:text-xs mb-8 md:mb-12">Score de Comportamento</h3>
                         
                         <div className="relative mb-8 md:mb-12 flex items-center justify-center w-full">
@@ -421,26 +335,6 @@ const FinancialAssessment: React.FC<FinancialAssessmentProps> = ({ user, onGoBac
                         
                         <h4 className={`text-2xl md:text-3xl font-bold ${color} mb-4`}>{classification}</h4>
                         <p className="text-gray-300 text-xs md:text-sm leading-relaxed max-w-xs">{description}</p>
-                    </div>
-
-                    {/* Radar Chart Card */}
-                    <div className="lg:col-span-8 bg-[#111827] dark:bg-gray-800 p-4 sm:p-8 rounded-[2.5rem] shadow-2xl border border-white/5 flex flex-col h-full overflow-hidden">
-                        <div className="flex items-center gap-2 mb-4 md:mb-8 ml-2">
-                             <div className="p-2 bg-blue-500/10 rounded-lg">
-                                <ChartBarIcon className="h-5 w-5 text-blue-400" />
-                             </div>
-                             <h3 className="text-base md:text-lg font-bold text-white">Perfil de Competências (Atividades)</h3>
-                        </div>
-                        
-                        <div className="flex-1 min-h-[300px] md:min-h-[400px] w-full">
-                            {chartData && <Radar key={themeKey} data={chartData} options={radarOptions} />}
-                        </div>
-                        
-                        <div className="mt-4 md:mt-6 pt-4 border-t border-white/5 text-center">
-                            <p className="text-[10px] md:text-xs text-gray-500 px-4">
-                                O gráfico acima reflete todas as respostas coletadas para seu histórico, excluindo dados demográficos e de perfil.
-                            </p>
-                        </div>
                     </div>
                 </div>
 
