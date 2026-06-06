@@ -216,11 +216,8 @@ const Auth: React.FC<AuthProps> = ({ onLoginSuccess }) => {
                         <h1 className="text-2xl font-bold tracking-tight text-white font-display mb-2 leading-tight">
                             Diagnóstico de Bem-Estar Financeiro
                         </h1>
-                        <p className="text-xs text-indigo-400 font-semibold uppercase tracking-wider mb-1">
+                        <p className="text-xs text-indigo-400 font-semibold uppercase tracking-wider">
                             Cooperativa de Crédito · Centro-Oeste de Minas Gerais
-                        </p>
-                        <p className="text-sm text-slate-400 font-medium">
-                            Controle e comportamento financeiro inteligente
                         </p>
                     </div>
 
