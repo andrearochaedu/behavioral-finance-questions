@@ -1,0 +1,8 @@
+{
+  "name": "New Fin-Edu",
+  "description": "Um portal inteligente para análise de comportamento e perfil de saúde financeira através de um questionário interativo e dinâmico.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
