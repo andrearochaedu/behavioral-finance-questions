@@ -12,7 +12,8 @@ import {
     ArrowPathIcon,
     HomeIcon,
     ShieldCheckIcon,
-    ClipboardDocumentCheckIcon
+    ClipboardDocumentCheckIcon,
+    LightBulbIcon
 } from '@heroicons/react/24/outline';
 
 interface FinancialAssessmentProps {
@@ -303,21 +304,46 @@ const FinancialAssessment: React.FC<FinancialAssessmentProps> = ({ user, onGoBac
     const renderResult = () => {
         const score = assessmentResult?.r_calculated_score || 14;
         
-        let classification = "Iniciante";
-        let color = "text-orange-500";
+        let classification = "Saúde Financeira Inicial (Baixa)";
+        let color = "text-orange-500 dark:text-orange-400";
         let gaugeColor = "rgba(249, 115, 22, 1)";
-        let description = "Você está começando sua jornada. Focar em educação financeira básica ajudará a melhorar seu comportamento.";
+        let description = "Seu índice aponta os primeiros sinais de desequilíbrio e risco de estresse financeiro. Conforme o referencial de diagnóstico do Banco Central, este é um momento acolhedor para estruturar as contas básicas, recuperar o oxigênio mensal e restabelecer sua tranquilidade.";
 
-        if (score >= 65) {
-            classification = "Avançado";
-            color = "text-emerald-500";
+        if (score >= 83) {
+            classification = "Saúde Financeira Ótima";
+            color = "text-emerald-500 dark:text-emerald-400";
             gaugeColor = "rgba(16, 185, 129, 1)";
-            description = "Excelente! Você demonstra ótimos hábitos e comportamento financeiro saudável.";
-        } else if (score >= 45) {
-            classification = "Intermediário";
-            color = "text-blue-500";
+            description = "Parabéns! Sua pontuação indica uma caminhada de excelência: vida financeira sem estresse, onde suas finanças proporcionam segurança ativa e ampla liberdade de escolha para o amanhã.";
+        } else if (score >= 69) {
+            classification = "Saúde Financeira Muito Boa";
+            color = "text-emerald-600 dark:text-emerald-500";
+            gaugeColor = "rgba(16, 185, 129, 0.8)";
+            description = "Excelente controle do orçamento diário. De acordo com as diretrizes do Caderno de Educação Financeira do Banco Central, o seu próximo passo estratégico é consolidar a transição profissional para a construção de patrimônio e investimentos consistentes.";
+        } else if (score >= 61) {
+            classification = "Saúde Financeira Boa";
+            color = "text-blue-500 dark:text-blue-400";
             gaugeColor = "rgba(59, 130, 246, 1)";
-            description = "Você está no caminho certo, mas ainda pode otimizar seu comportamento financeiro.";
+            description = "Você realiza o básico muito bem feito! Suas contas correntes e rotinas gerais estão estruturadas, havendo um ótimo ponto de partida para incrementar suas reservas de segurança mensais.";
+        } else if (score >= 57) {
+            classification = "Saúde Financeira Ok";
+            color = "text-yellow-500 dark:text-yellow-400";
+            gaugeColor = "rgba(234, 179, 8, 1)";
+            description = "Seu equilíbrio de contas atualmente está no limite, com pouco espaço para imprevistos. O diagnóstico literário I-SFB sugere o fortalecimento imediato de rotinas protetivas para blindar seu orçamento de pequenas eventualidades.";
+        } else if (score >= 50) {
+            classification = "Saúde Financeira Inicial (Baixa)";
+            color = "text-orange-500 dark:text-orange-400";
+            gaugeColor = "rgba(249, 115, 22, 1)";
+            description = "Seu índice aponta os primeiros sinais de desequilíbrio e risco de estresse financeiro. Conforme o referencial de diagnóstico do Banco Central, este é um momento acolhedor para estruturar as contas básicas, recuperar o oxigênio mensal e restabelecer sua tranquilidade.";
+        } else if (score >= 37) {
+            classification = "Saúde Financeira sob Atenção (Muito Baixa)";
+            color = "text-rose-500 dark:text-rose-400";
+            gaugeColor = "rgba(244, 63, 94, 0.85)";
+            description = "Há indicação de risco de atingir uma situação financeira crítica. Sob as recomendações de saúde e cidadania financeira de FEBRABAN e Banco Central, sugere-se a suspensão de novos parcelamentos e o mapeamento conjunto de acordos protetivos.";
+        } else {
+            classification = "Saúde Financeira em Reestruturação (Ruim)";
+            color = "text-rose-600 dark:text-rose-500";
+            gaugeColor = "rgba(244, 63, 94, 1)";
+            description = "Seu momento atual reflete um círculo de fragilidade, estresse e desorganização financeira. Mas lembre-se: trata-se apenas de um reflexo de comportamento dinâmico. O Caderno do Banco Central orienta que o foco principal agora é o estancamento de despesas não essenciais e suporte de renegociação.";
         }
 
         const answersList = assessmentResult?.answers || [];
@@ -340,39 +366,65 @@ const FinancialAssessment: React.FC<FinancialAssessmentProps> = ({ user, onGoBac
         let selfControlClass = "Moderado";
         let selfControlColor = "text-yellow-500 dark:text-yellow-400";
         let selfControlBg = "bg-yellow-500/10";
-        let selfControlText = "Nível moderado de autocontrole de gastos. Embora consiga planejar a curto prazo, pode sofrer com compras por impulso diante de gatilhos emocionais ou descontos tentadores.";
+        let selfControlText = "Nível moderado de autocontrole de gastos. Segundo as diretrizes de comportamento do consumidor da pesquisa de Ponchio, você consegue manter um bom planejamento de curto prazo, mas pode encontrar oportunidades de fortalecimento ao lidar com gatilhos de consumo cotidianos.";
         
         if (meanCSSC >= 4.0) {
-            selfControlClass = "Alto";
+            selfControlClass = "Sólido e Consciente";
             selfControlColor = "text-emerald-500 dark:text-emerald-400";
             selfControlBg = "bg-emerald-500/10";
-            selfControlText = "Excelente nível de autocontrole de gastos. Você pondera as consequências de suas despesas e resiste ativamente a tentações, o que reduz significativamente o estresse financeiro diário e garante maior segurança futura.";
+            selfControlText = "Excelente nível de autocontrole de gastos. Conforme apontado na literatura científica de Ponchio, você demonstra uma postura reflexiva em relação às suas compras, resistindo ativamente a apelos imediatos, o que promove uma redução expressiva no estresse financeiro diário.";
         } else if (meanCSSC < 3.0) {
-            selfControlClass = "Baixo";
+            selfControlClass = "A Ser Desenvolvido";
             selfControlColor = "text-rose-500 dark:text-rose-400";
             selfControlBg = "bg-rose-500/10";
-            selfControlText = "Baixo nível de autocontrole de gastos. É provável que você aja de forma imediatista e tenha dificuldades em reprimir gatilhos de consumo, gerando maior fricção e preocupação financeira.";
+            selfControlText = "Seu autocontrole de gastos está em fase de desenvolvimento. A literatura acadêmica recomenda o fortalecimento de pequenas rotinas de parada e reflexão antes de compras por impulso, atenuando a fricção e as preocupações com o orçamento.";
         }
 
-        let mentalAccountingClass = "Moderada";
+        let mentalAccountingClass = "Parcial e Adaptativa";
         let mentalAccountingColor = "text-yellow-500 dark:text-yellow-400";
         let mentalAccountingBg = "bg-yellow-500/10";
-        let mentalAccountingText = "Sua contabilidade mental é intermediária. Você rastreia as despesas e compreende suas categorias básicas de consumo, mas de forma parcial ou oscilante.";
+        let mentalAccountingText = "Sua prática de contabilidade mental segue um formato flexível. Os conceitos de Mauehlbacher indicam que você possui noção clara das suas principais despesas, mas pode aprimorar sua organização ao padronizar a separação de orçamentos específicos.";
         
         if (meanMentalAccounting >= 4.0) {
-            mentalAccountingClass = "Forte";
+            mentalAccountingClass = "Estruturada e Precisa";
             mentalAccountingColor = "text-indigo-500 dark:text-indigo-400";
             mentalAccountingBg = "bg-indigo-500/10";
-            mentalAccountingText = "Contabilidade mental robusta e estruturada. Categorizar seus fluxos, monitorar despesas de forma detalhada e planejar orçamentos servem como um forte pilar de autorregulação e organização financeira.";
+            mentalAccountingText = "Sua contabilidade mental é altamente estruturada. Em conformidade com o referencial teórico de Mauehlbacher e Kirchler, categorizar minuciosamente seus fluxos e limitar despesas conforme divisões prévias operam como um excelente pilar de autodisciplina e harmonia orçamentária.";
         } else if (meanMentalAccounting < 3.0) {
-            mentalAccountingClass = "Fraca";
+            mentalAccountingClass = "Incipiente ou Espontânea";
             mentalAccountingColor = "text-orange-500 dark:text-orange-400";
             mentalAccountingBg = "bg-orange-500/10";
-            mentalAccountingText = "Contabilidade mental incipiente ou ausente. A falta de categorização e acompanhamento dos gastos expõe você à falsa percepção de liquidez e a frequentes descompassos no orçamento.";
+            mentalAccountingText = "Sua contabilidade mental encontra-se em estágio inicial. A literatura científica sugere que a separação sistemática de verbas e o acompanhamento intencional das categorias de uso evitam falsas impressões de liquidez e fortalecem o equilíbrio orçamentário.";
         }
 
+        // 1. Autocontrole strings based on Ponchio + BCB Mod 4
+        let recAutocontrole = "";
+        if (meanCSSC >= 4.0) {
+            recAutocontrole = "Seu foco de consumo é exemplar. O Módulo 4 do Caderno de Educação Financeira do Banco Central sugere capitalizar esse comportamento protegendo-se dos gatilhos sutis da internet, como as assinaturas e serviços de uso adormecido ou compras recorrentes em aplicativos de entrega.";
+        } else if (meanCSSC >= 3.0) {
+            recAutocontrole = "Você possui boa estabilidade. Para mitigar impulsos imediatistas cotidianos, adote a regra do adiamento voluntário por 24 horas antes de concluir compras supérfluas (Módulo 1, pág. 21). Isso dá tempo para a razão equilibrar os gatilhos emocionais da tentação imediata.";
+        } else {
+            recAutocontrole = "Seu autocontrole de gastos está em fase de fortalecimento. O Módulo 4 do BCB (pág. 57) orienta planejar as despesas no papel e evitar ir ao supermercado com o estômago vazio (pois pesquisas mostram que isso induz o estresse e compras impulsivas severas).";
+        }
+
+        // 2. Contabilidade mental based on Muehlbacher + BCB Mod 2
+        let recOrçamento = "";
+        if (meanMentalAccounting >= 4.0) {
+            recOrçamento = "Sua organização orçamentária é de alto nível. Conforme o Módulo 2 do Banco Central (pág. 26-29), refine suas Etapas e passe a debater o orçamento e metas de longo prazo em parceria dialogada e democrática com a sua família.";
+        } else if (meanMentalAccounting >= 3.0) {
+            recOrçamento = "Você possui consistência parcial relevante. Busque aplicar ativamente as 4 Etapas da literatura do BCB: Planejamento (estimativa), Registro Diário (anotando até os menores gastos), Agrupamento por categorias limítrofes e Avaliação Mensal de desvios (pág. 26).";
+        } else {
+            recOrçamento = "Sua contabilidade orçamentária requer dedicação básica inicial. O Módulo 2 do BCB (pág. 24, 30) destaca que ter controle simples de entradas e saídas evita a falsa percepção de liquidez e garante que as despesas do período fiquem sob a regra de ouro: abaixo das receitas.";
+        }
+
+        // 3. Juros e Crédito based on BCB Mod 3
+        let recCredito = "A Cidadania Financeira desmitifica os juros compostos: use-os a seu favor na poupança e previna-os no crédito. Antes de optar por cartão ou empréstimo para cobrir as contas, busque sempre comparar o Custo Efetivo Total (CET), que traz todos os custos ocultos, em vez de apenas avaliar se a prestação cabe no bolso temporariamente (Módulo 3, pág. 37, 46).";
+
+        // 4. Poupança e Futuro based on BCB Mod 5 & 6
+        let recPoupança = "Como diretriz máxima de proteção de futuro e investimento do Banco Central (Módulo 5 e 6, pág. 28, 60), use rigorosamente o método de 'pagar-se primeiro': reserve a parcela dos seus planos prioritários e aposentadoria imediatamente ao receber seus rendimentos, aplicando-os antes de iniciar as demais saídas operacionais.";
+
         return (
-            <div className="max-w-5xl mx-auto py-6 animate-fade-in">
+            <div className="max-w-5xl mx-auto py-6 animate-fade-in relative z-10">
                 <div className="text-center mb-10 px-4">
                     <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white font-display mb-2">Seu Relatório de Comportamento</h2>
                     <p className="text-gray-500 text-sm md:text-base">Análise realizada em {new Date().toLocaleDateString()}</p>
@@ -394,18 +446,18 @@ const FinancialAssessment: React.FC<FinancialAssessmentProps> = ({ user, onGoBac
                                     strokeWidth="16" 
                                     fill="transparent" 
                                     strokeDasharray={540} 
-                                    strokeDashoffset={540 - (540 * score) / 86} 
+                                    strokeDashoffset={540 - (540 * score) / 100} 
                                     strokeLinecap="round" 
                                 />
                             </svg>
                             <div className="absolute inset-0 flex items-center justify-center flex-col">
                                 <span className="text-5xl md:text-7xl font-bold text-white tracking-tighter">{score}</span>
-                                <span className="text-[10px] md:text-sm text-gray-400 font-medium mt-1">Pontos</span>
+                                <span className="text-[10px] md:text-sm text-gray-400 font-medium mt-1">Pontos (I-SFB)</span>
                             </div>
                         </div>
                         
-                        <h4 className={`text-2xl md:text-3xl font-bold ${color} mb-4`}>{classification}</h4>
-                        <p className="text-gray-300 text-xs md:text-sm leading-relaxed max-w-xs">{description}</p>
+                        <h4 className={`text-xl md:text-2xl font-bold ${color} mb-4`}>{classification}</h4>
+                        <p className="text-gray-300 text-xs md:text-sm leading-relaxed max-w-sm">{description}</p>
                     </div>
 
                     {/* Dimension Breakdown Card */}
@@ -418,7 +470,7 @@ const FinancialAssessment: React.FC<FinancialAssessmentProps> = ({ user, onGoBac
                                 </div>
                                 <div>
                                     <h3 className="text-lg font-bold text-white">Autocontrole de Gastos (CSSC)</h3>
-                                    <p className="text-[10px] uppercase tracking-wider text-gray-400 font-mono font-bold">Referência: Ponchio et al. (2019)</p>
+                                    <p className="text-[10px] uppercase tracking-wider text-gray-400 font-mono font-bold">Referência Científica: Ponchio et al. (2019)</p>
                                 </div>
                             </div>
 
@@ -442,7 +494,7 @@ const FinancialAssessment: React.FC<FinancialAssessmentProps> = ({ user, onGoBac
                             </p>
                             
                             <p className="text-[10px] text-gray-400/60 mt-3 pt-2 border-t border-white/5 italic font-sans dark:text-gray-400/50">
-                                * A pesquisa brasileira de Ponchio conclui que o autocontrole de consumo (CSSC) é o principal amortecedor regulatório de impulsos materialistas e estresse de gastos.
+                                * A pesquisa acadêmica nacional salienta que o autocontrole comportamental opera como o principal pilar de contenção de impulsos e proteção do bem-estar pessoal percebido.
                             </p>
                         </div>
 
@@ -454,12 +506,12 @@ const FinancialAssessment: React.FC<FinancialAssessmentProps> = ({ user, onGoBac
                                 </div>
                                 <div>
                                     <h3 className="text-lg font-bold text-white">Contabilidade Mental</h3>
-                                    <p className="text-[10px] uppercase tracking-wider text-gray-400 font-mono font-bold">Referência: Muehlbacher & Kirchler (2019)</p>
+                                    <p className="text-[10px] uppercase tracking-wider text-gray-400 font-mono font-bold">Referência Científica: Muehlbacher & Kirchler (2019)</p>
                                 </div>
                             </div>
 
                             <div className="mt-2 flex items-baseline justify-between mb-2">
-                                <span className={`text-xl font-bold ${mentalAccountingColor}`}>Mente {mentalAccountingClass}</span>
+                                <span className={`text-xl font-bold ${mentalAccountingColor}`}>{mentalAccountingClass}</span>
                                 <span className="text-gray-300 font-mono text-sm">{meanMentalAccounting.toFixed(1)} <span className="text-gray-500 text-xs">/ 5.0</span></span>
                             </div>
 
@@ -478,8 +530,73 @@ const FinancialAssessment: React.FC<FinancialAssessmentProps> = ({ user, onGoBac
                             </p>
 
                             <p className="text-[10px] text-gray-400/60 mt-3 pt-2 border-t border-white/5 italic font-sans dark:text-gray-400/50">
-                                * O estudo de Muehlbacher et al. aponta que separar de forma sistemática orçamentos em contas mentais reduz a impulsividade de não-planejamento e melhora os resultados reais.
+                                * Estudos de contabilidade mental sustentam que separar de forma sistemática orçamentos em contas mentais reduz a impulsividade de gastos imediatistas e melhora os resultados reais.
                             </p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Recommendations Section */}
+                <div className="mt-8 px-4">
+                    <div className="bg-[#111827] dark:bg-gray-800 p-6 md:p-8 rounded-[2rem] shadow-2xl border border-white/5">
+                        <div className="flex items-center gap-3 mb-6">
+                            <div className="p-2 bg-amber-500/10 rounded-xl">
+                                <LightBulbIcon className="h-6 w-6 text-amber-500" />
+                            </div>
+                            <div>
+                                <h3 className="text-xl font-bold text-white font-display">Caminhos de Recomendação Prática</h3>
+                                <p className="text-[10px] text-gray-400 font-sans uppercase tracking-wider font-bold">Diretrizes Científicas extraídas do Caderno de Educação Financeira do Banco Central do Brasil</p>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {/* Autocontrole */}
+                            <div className="p-6 bg-white/5 rounded-2xl border border-white/5 flex flex-col justify-between">
+                                <div>
+                                    <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-400 mb-2 font-mono">1. Autocontrole e Consumo Consciente</h4>
+                                    <p className="text-xs text-gray-300 leading-relaxed font-sans">{recAutocontrole}</p>
+                                </div>
+                                <div className="mt-4 pt-2 border-t border-white/5 flex items-center justify-between text-[9px] text-gray-500">
+                                    <span>Tópico: Regulação Comportamental</span>
+                                    <span className="font-mono">Fonte: Pesquisa Ponchio | Módulo 4 BCB</span>
+                                </div>
+                            </div>
+
+                            {/* Contabilidade Mental */}
+                            <div className="p-6 bg-white/5 rounded-2xl border border-white/5 flex flex-col justify-between">
+                                <div>
+                                    <h4 className="text-xs font-bold uppercase tracking-wider text-indigo-400 mb-2 font-mono">2. Organização do Orçamento</h4>
+                                    <p className="text-xs text-gray-300 leading-relaxed font-sans">{recOrçamento}</p>
+                                </div>
+                                <div className="mt-4 pt-2 border-t border-white/5 flex items-center justify-between text-[9px] text-gray-500">
+                                    <span>Tópico: Planejamento Dinâmico</span>
+                                    <span className="font-mono">Fonte: Muehlbacher Model | Módulo 2 BCB</span>
+                                </div>
+                            </div>
+
+                            {/* Crédito e Juros (Mod 3 BCB) */}
+                            <div className="p-6 bg-white/5 rounded-2xl border border-white/5 flex flex-col justify-between">
+                                <div>
+                                    <h4 className="text-xs font-bold uppercase tracking-wider text-rose-400 mb-2 font-mono">3. Uso Consciente de Crédito & Juros</h4>
+                                    <p className="text-xs text-gray-300 leading-relaxed font-sans">{recCredito}</p>
+                                </div>
+                                <div className="mt-4 pt-2 border-t border-white/5 flex items-center justify-between text-[9px] text-gray-500">
+                                    <span>Tópico: Custo Efetivo Total</span>
+                                    <span className="font-mono">Fonte: Caderno de Educação BCB (Módulo 3)</span>
+                                </div>
+                            </div>
+
+                            {/* Poupança e Futuro (Mod 5 & 6 BCB) */}
+                            <div className="p-6 bg-white/5 rounded-2xl border border-white/5 flex flex-col justify-between">
+                                <div>
+                                    <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400 mb-2 font-mono">4. Poupança Ativa e Aposentadoria</h4>
+                                    <p className="text-xs text-gray-300 leading-relaxed font-sans">{recPoupança}</p>
+                                </div>
+                                <div className="mt-4 pt-2 border-t border-white/5 flex items-center justify-between text-[9px] text-gray-500">
+                                    <span>Tópico: Cidadania Monetária</span>
+                                    <span className="font-mono">Fonte: Caderno de Educação BCB (Módulo 5 e 6)</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
