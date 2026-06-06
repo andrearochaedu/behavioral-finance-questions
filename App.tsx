@@ -140,10 +140,13 @@ const AuthenticatedApp: React.FC<{
                      
                      {/* Logo */}
                      <div className="flex items-center gap-3">
-                         <div className="bg-indigo-600 text-white p-1.5 rounded-lg shadow-md shadow-indigo-600/30">
+                         <div className="bg-gradient-to-br from-emerald-600 to-indigo-600 text-white p-2 rounded-lg shadow-md shadow-indigo-600/25">
                              <BanknotesIcon className="h-5 w-5" />
                          </div>
-                         <h1 className="text-lg font-bold font-display tracking-tight text-gray-900 dark:text-white">FinEdu</h1>
+                         <div className="flex flex-col">
+                             <h1 className="text-sm sm:text-base font-bold font-display tracking-tight text-gray-900 dark:text-white leading-none">Diagnóstico de Bem-Estar Financeiro</h1>
+                             <span className="text-[9px] sm:text-[10px] text-gray-500 dark:text-gray-400 font-medium leading-none mt-0.5">Cooperativa de Crédito · Centro-Oeste de Minas Gerais</span>
+                         </div>
                      </div>
 
                      {/* Profile Actions */}

@@ -1,6 +1,6 @@
 {
-  "name": "New Fin-Edu",
-  "description": "Um portal inteligente para análise de comportamento e perfil de saúde financeira através de um questionário interativo e dinâmico.",
+  "name": "Diagnóstico de Bem-Estar Financeiro",
+  "description": "Diagnóstico de Bem-Estar Financeiro - Cooperativa de Crédito · Centro-Oeste de Minas Gerais. Um portal inteligente para análise de comportamento e saúde financeira.",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"

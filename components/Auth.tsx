@@ -208,16 +208,19 @@ const Auth: React.FC<AuthProps> = ({ onLoginSuccess }) => {
 
                     {/* --- HEADER --- */}
                     <div className="text-center mb-8 relative z-10">
-                        <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 mb-5 shadow-lg shadow-indigo-500/30 transform rotate-3 hover:rotate-6 transition-transform duration-500">
+                        <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-emerald-500 via-indigo-500 to-purple-600 mb-5 shadow-lg shadow-indigo-500/30 transform rotate-3 hover:rotate-6 transition-transform duration-500">
                             <svg className="w-8 h-8 text-white drop-shadow-md" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                             </svg>
                         </div>
-                        <h1 className="text-3xl font-bold tracking-tight text-white font-display mb-1">
-                            FinEdu
+                        <h1 className="text-2xl font-bold tracking-tight text-white font-display mb-2 leading-tight">
+                            Diagnóstico de Bem-Estar Financeiro
                         </h1>
+                        <p className="text-xs text-indigo-400 font-semibold uppercase tracking-wider mb-1">
+                            Cooperativa de Crédito · Centro-Oeste de Minas Gerais
+                        </p>
                         <p className="text-sm text-slate-400 font-medium">
-                            Controle financeiro inteligente
+                            Controle e comportamento financeiro inteligente
                         </p>
                     </div>
 

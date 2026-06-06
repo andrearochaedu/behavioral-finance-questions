@@ -10,7 +10,9 @@ import {
     PlayIcon, 
     CheckCircleIcon,
     ArrowPathIcon,
-    HomeIcon
+    HomeIcon,
+    ShieldCheckIcon,
+    ClipboardDocumentCheckIcon
 } from '@heroicons/react/24/outline';
 
 interface FinancialAssessmentProps {
@@ -280,6 +282,24 @@ const FinancialAssessment: React.FC<FinancialAssessmentProps> = ({ user, onGoBac
         );
     };
 
+    const getQuestionScore = (questionId: string, answersList: AssessmentAnswer[]): number => {
+        const ans = answersList.find(a => a.questionId === questionId);
+        if (!ans) return 0;
+        const q = FINANCIAL_QUESTIONS.find(quest => quest.id === questionId);
+        if (!q || !q.options) return 0;
+        
+        const option = q.options.find(o => 
+            o.text === ans.value || 
+            o.score.toString() === ans.value.toString()
+        );
+        if (option) return option.score;
+        
+        const parsed = typeof ans.value === 'number' ? ans.value : parseInt(ans.value);
+        if (!isNaN(parsed)) return parsed;
+        
+        return 0;
+    };
+
     const renderResult = () => {
         const score = assessmentResult?.r_calculated_score || 14;
         
@@ -300,16 +320,67 @@ const FinancialAssessment: React.FC<FinancialAssessmentProps> = ({ user, onGoBac
             description = "Você está no caminho certo, mas ainda pode otimizar seu comportamento financeiro.";
         }
 
+        const answersList = assessmentResult?.answers || [];
+        
+        // Ponchio Autocontrol Category (CSSC: Q17-Q20)
+        const scoreQ17 = getQuestionScore('Q17', answersList) || 3;
+        const scoreQ18 = getQuestionScore('Q18', answersList) || 3;
+        const scoreQ19 = getQuestionScore('Q19', answersList) || 3;
+        const scoreQ20 = getQuestionScore('Q20', answersList) || 3;
+        const meanCSSC = (scoreQ17 + scoreQ18 + scoreQ19 + scoreQ20) / 4;
+
+        // Muehlbacher Mental Accounting Category (MA: Q21-Q25)
+        const scoreQ21 = getQuestionScore('Q21', answersList) || 3;
+        const scoreQ22 = getQuestionScore('Q22', answersList) || 3;
+        const scoreQ23 = getQuestionScore('Q23', answersList) || 3;
+        const scoreQ24 = getQuestionScore('Q24', answersList) || 3;
+        const scoreQ25 = getQuestionScore('Q25', answersList) || 3;
+        const meanMentalAccounting = (scoreQ21 + scoreQ22 + scoreQ23 + scoreQ24 + scoreQ25) / 5;
+
+        let selfControlClass = "Moderado";
+        let selfControlColor = "text-yellow-500 dark:text-yellow-400";
+        let selfControlBg = "bg-yellow-500/10";
+        let selfControlText = "Nível moderado de autocontrole de gastos. Embora consiga planejar a curto prazo, pode sofrer com compras por impulso diante de gatilhos emocionais ou descontos tentadores.";
+        
+        if (meanCSSC >= 4.0) {
+            selfControlClass = "Alto";
+            selfControlColor = "text-emerald-500 dark:text-emerald-400";
+            selfControlBg = "bg-emerald-500/10";
+            selfControlText = "Excelente nível de autocontrole de gastos. Você pondera as consequências de suas despesas e resiste ativamente a tentações, o que reduz significativamente o estresse financeiro diário e garante maior segurança futura.";
+        } else if (meanCSSC < 3.0) {
+            selfControlClass = "Baixo";
+            selfControlColor = "text-rose-500 dark:text-rose-400";
+            selfControlBg = "bg-rose-500/10";
+            selfControlText = "Baixo nível de autocontrole de gastos. É provável que você aja de forma imediatista e tenha dificuldades em reprimir gatilhos de consumo, gerando maior fricção e preocupação financeira.";
+        }
+
+        let mentalAccountingClass = "Moderada";
+        let mentalAccountingColor = "text-yellow-500 dark:text-yellow-400";
+        let mentalAccountingBg = "bg-yellow-500/10";
+        let mentalAccountingText = "Sua contabilidade mental é intermediária. Você rastreia as despesas e compreende suas categorias básicas de consumo, mas de forma parcial ou oscilante.";
+        
+        if (meanMentalAccounting >= 4.0) {
+            mentalAccountingClass = "Forte";
+            mentalAccountingColor = "text-indigo-500 dark:text-indigo-400";
+            mentalAccountingBg = "bg-indigo-500/10";
+            mentalAccountingText = "Contabilidade mental robusta e estruturada. Categorizar seus fluxos, monitorar despesas de forma detalhada e planejar orçamentos servem como um forte pilar de autorregulação e organização financeira.";
+        } else if (meanMentalAccounting < 3.0) {
+            mentalAccountingClass = "Fraca";
+            mentalAccountingColor = "text-orange-500 dark:text-orange-400";
+            mentalAccountingBg = "bg-orange-500/10";
+            mentalAccountingText = "Contabilidade mental incipiente ou ausente. A falta de categorização e acompanhamento dos gastos expõe você à falsa percepção de liquidez e a frequentes descompassos no orçamento.";
+        }
+
         return (
-            <div className="max-w-4xl mx-auto py-6 animate-fade-in">
+            <div className="max-w-5xl mx-auto py-6 animate-fade-in">
                 <div className="text-center mb-10 px-4">
                     <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white font-display mb-2">Seu Relatório de Comportamento</h2>
                     <p className="text-gray-500 text-sm md:text-base">Análise realizada em {new Date().toLocaleDateString()}</p>
                 </div>
 
-                <div className="max-w-md mx-auto px-4">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch px-4">
                     {/* Gauge Card */}
-                    <div className="bg-[#111827] dark:bg-gray-800 p-8 md:p-10 rounded-[2.5rem] shadow-2xl flex flex-col items-center justify-center text-center border border-white/5 h-full">
+                    <div className="lg:col-span-5 bg-[#111827] dark:bg-gray-800 p-8 md:p-10 rounded-[2.5rem] shadow-2xl flex flex-col items-center justify-center text-center border border-white/5 h-full">
                         <h3 className="text-gray-400 font-bold uppercase tracking-widest text-[10px] md:text-xs mb-8 md:mb-12">Score de Comportamento</h3>
                         
                         <div className="relative mb-8 md:mb-12 flex items-center justify-center w-full">
@@ -335,6 +406,81 @@ const FinancialAssessment: React.FC<FinancialAssessmentProps> = ({ user, onGoBac
                         
                         <h4 className={`text-2xl md:text-3xl font-bold ${color} mb-4`}>{classification}</h4>
                         <p className="text-gray-300 text-xs md:text-sm leading-relaxed max-w-xs">{description}</p>
+                    </div>
+
+                    {/* Dimension Breakdown Card */}
+                    <div className="lg:col-span-7 space-y-6 flex flex-col justify-between">
+                        {/* Autocontrole Card */}
+                        <div className="bg-[#111827] dark:bg-gray-800 p-6 md:p-8 rounded-[2rem] shadow-2xl border border-white/5 flex flex-col">
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className={`p-2 rounded-xl ${selfControlBg}`}>
+                                    <ShieldCheckIcon className={`h-6 w-6 ${selfControlColor}`} />
+                                </div>
+                                <div>
+                                    <h3 className="text-lg font-bold text-white">Autocontrole de Gastos (CSSC)</h3>
+                                    <p className="text-[10px] uppercase tracking-wider text-gray-400 font-mono font-bold">Referência: Ponchio et al. (2019)</p>
+                                </div>
+                            </div>
+
+                            <div className="mt-2 flex items-baseline justify-between mb-2">
+                                <span className={`text-xl font-bold ${selfControlColor}`}>Nível {selfControlClass}</span>
+                                <span className="text-gray-300 font-mono text-sm">{meanCSSC.toFixed(1)} <span className="text-gray-500 text-xs">/ 5.0</span></span>
+                            </div>
+
+                            {/* Progress bar */}
+                            <div className="w-full bg-white/5 rounded-full h-2 overflow-hidden mb-4">
+                                <div 
+                                    className={`h-full rounded-full transition-all duration-1000 ${
+                                        meanCSSC >= 4.0 ? 'bg-emerald-500' : meanCSSC >= 3.0 ? 'bg-yellow-500' : 'bg-rose-500'
+                                    }`}
+                                    style={{ width: `${(meanCSSC / 5) * 100}%` }}
+                                />
+                            </div>
+
+                            <p className="text-xs text-gray-300 leading-relaxed font-sans">
+                                {selfControlText}
+                            </p>
+                            
+                            <p className="text-[10px] text-gray-400/60 mt-3 pt-2 border-t border-white/5 italic font-sans dark:text-gray-400/50">
+                                * A pesquisa brasileira de Ponchio conclui que o autocontrole de consumo (CSSC) é o principal amortecedor regulatório de impulsos materialistas e estresse de gastos.
+                            </p>
+                        </div>
+
+                        {/* Contabilidade Mental Card */}
+                        <div className="bg-[#111827] dark:bg-gray-800 p-6 md:p-8 rounded-[2rem] shadow-2xl border border-white/5 flex flex-col">
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className={`p-2 rounded-xl ${mentalAccountingBg}`}>
+                                    <ClipboardDocumentCheckIcon className={`h-6 w-6 ${mentalAccountingColor}`} />
+                                </div>
+                                <div>
+                                    <h3 className="text-lg font-bold text-white">Contabilidade Mental</h3>
+                                    <p className="text-[10px] uppercase tracking-wider text-gray-400 font-mono font-bold">Referência: Muehlbacher & Kirchler (2019)</p>
+                                </div>
+                            </div>
+
+                            <div className="mt-2 flex items-baseline justify-between mb-2">
+                                <span className={`text-xl font-bold ${mentalAccountingColor}`}>Mente {mentalAccountingClass}</span>
+                                <span className="text-gray-300 font-mono text-sm">{meanMentalAccounting.toFixed(1)} <span className="text-gray-500 text-xs">/ 5.0</span></span>
+                            </div>
+
+                            {/* Progress bar */}
+                            <div className="w-full bg-white/5 rounded-full h-2 overflow-hidden mb-4">
+                                <div 
+                                    className={`h-full rounded-full transition-all duration-1000 ${
+                                        meanMentalAccounting >= 4.0 ? 'bg-indigo-500' : meanMentalAccounting >= 3.0 ? 'bg-yellow-500' : 'bg-orange-500'
+                                    }`}
+                                    style={{ width: `${(meanMentalAccounting / 5) * 100}%` }}
+                                />
+                            </div>
+
+                            <p className="text-xs text-gray-300 leading-relaxed font-sans">
+                                {mentalAccountingText}
+                            </p>
+
+                            <p className="text-[10px] text-gray-400/60 mt-3 pt-2 border-t border-white/5 italic font-sans dark:text-gray-400/50">
+                                * O estudo de Muehlbacher et al. aponta que separar de forma sistemática orçamentos em contas mentais reduz a impulsividade de não-planejamento e melhora os resultados reais.
+                            </p>
+                        </div>
                     </div>
                 </div>
 
