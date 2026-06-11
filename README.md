@@ -2,6 +2,8 @@
 
 Esta plataforma consiste em uma aplicação inteligente projetada para o diagnóstico de hábitos, comportamento e bem-estar financeiro de membros de cooperativas de crédito. O sistema une a precisão cibernética moderna ao calor humano nobre, aproximando teorias de relevância científica e referências de políticas públicas nacionais de uma jornada prática, acolhedora e livre de julgamentos orçamentários agressivos.
 
+O desenvolvimento da pesquisa assim como o prodto técnico foram desenvolvidos com apoio do Programa Inova-Pós/IFMG, conforme Edital nº 447/2024.
+
 ---
 
 ## 🎓 Fundamentação Científica e Didática
